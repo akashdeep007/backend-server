@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const multer = require("multer");
+const mongoose = require("mongoose");
 
 const registrationRoutes = require("./routes/registration");
 
