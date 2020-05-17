@@ -14,7 +14,7 @@ router.post(
     body("EmailId").trim().isEmail(),
     body("MobileNumber").trim().isMobilePhone(),
     body("RegistrationType").trim(),
-    body("TicketNumbe").trim().isNumeric(),
+    body("TicketNumber").trim().isNumeric(),
   ],
   registrationController.postNewRegistration
 );
