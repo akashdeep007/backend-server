@@ -6,7 +6,30 @@ const { validationResult } = require("express-validator/check");
 const Registration = require("../models/Registration");
 
 exports.getRegistration = (req, res, next) => {
-  res.status(200).json({});
+  const currentPage = req.query.page || 1;
+  const perPage = 15;
+  let totalItems;
+  Registration.find()
+    .countDocuments()
+    .then((count) => {
+      totalItems = count;
+      return Registration.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
+    .then((Registrations) => {
+      res.status(200).json({
+        message: "Fetched Registration Details Successfully.",
+        Registrations: Registrations,
+        totalItems: totalItems,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
 
 exports.postNewRegistration = (req, res, next) => {
