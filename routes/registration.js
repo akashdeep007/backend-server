@@ -2,10 +2,11 @@ const express = require("express");
 const { body } = require("express-validator/check");
 
 const registrationController = require("../controllers/register");
+const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
-router.get("/registration", registrationController.getRegistration);
+router.get("/registration", isAuth, registrationController.getRegistration);
 
 router.post(
   "/registration",

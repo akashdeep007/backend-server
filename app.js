@@ -5,6 +5,7 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 
 const registrationRoutes = require("./routes/registration");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", registrationRoutes);
+app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
