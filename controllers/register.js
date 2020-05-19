@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const { validationResult } = require("express-validator");
+const { validationResult } = require("express-validator/check");
 
 const Registration = require("../models/Registration");
 
@@ -50,26 +50,34 @@ exports.postNewRegistration = (req, res, next) => {
   const MobileNumber = req.body.MobileNumber;
   const RegistrationType = req.body.RegistrationType;
   const TicketNumber = req.body.TicketNumber;
-  const registration = new Registration({
-    IdCardUrl: IdCardUrl,
-    Fullname: Fullname,
-    EmailId: EmailId,
-    MobileNumber: MobileNumber,
-    RegistrationType: RegistrationType,
-    TicketNumber: TicketNumber,
-  });
-  registration
-    .save()
-    .then((result) => {
+  Registration.findOne({ EmailId: EmailId }).then((user) => {
+    if (user) {
       res.status(201).json({
-        message: "Registered successfully!",
-        post: result,
+        message: " Already Registered ",
+        post: user._id,
       });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+    }
+    const registration = new Registration({
+      IdCardUrl: IdCardUrl,
+      Fullname: Fullname,
+      EmailId: EmailId,
+      MobileNumber: MobileNumber,
+      RegistrationType: RegistrationType,
+      TicketNumber: TicketNumber,
     });
+    registration
+      .save()
+      .then((result) => {
+        res.status(201).json({
+          message: "Registered successfully!",
+          post: result,
+        });
+      })
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+      });
+  });
 };
