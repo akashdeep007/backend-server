@@ -14,6 +14,7 @@ const registrationSchema = new Schema(
     EmailId: {
       type: String,
       required: true,
+      unique: true,
     },
     IdCardUrl: {
       type: String,

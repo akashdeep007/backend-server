@@ -52,7 +52,7 @@ exports.postNewRegistration = (req, res, next) => {
   const TicketNumber = req.body.TicketNumber;
   Registration.findOne({ EmailId: EmailId }).then((user) => {
     if (user) {
-      res.status(201).json({
+      return res.status(201).json({
         message: " Already Registered ",
         post: user._id,
       });
