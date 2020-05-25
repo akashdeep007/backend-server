@@ -32,6 +32,27 @@ exports.getRegistration = (req, res, next) => {
     });
 };
 
+exports.getSingleRegistration = (req, res, next) => {
+  const regId = req.params.regId;
+  Registration.findById(regId)
+    .then((reg) => {
+      if (!reg) {
+        const error = new Error("Could not find Registration Details");
+        error.statusCode = 404;
+        throw error;
+      }
+      res
+        .status(200)
+        .json({ message: "Registration Details fetched", registration: reg });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 exports.postNewRegistration = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -39,6 +60,7 @@ exports.postNewRegistration = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
+  //for testing comment out the if block and fetch idcardurl from body
   if (!req.file) {
     const error = new Error("No ID Card provided.");
     error.statusCode = 422;
@@ -54,7 +76,7 @@ exports.postNewRegistration = (req, res, next) => {
     if (user) {
       return res.status(201).json({
         message: " Already Registered ",
-        post: user._id,
+        result: user._id,
       });
     }
     const registration = new Registration({
@@ -70,7 +92,7 @@ exports.postNewRegistration = (req, res, next) => {
       .then((result) => {
         res.status(201).json({
           message: "Registered successfully!",
-          post: result,
+          result: result,
         });
       })
       .catch((err) => {
