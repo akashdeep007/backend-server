@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const qr = require("qr-image");
 
 const nodemailer = require("nodemailer");
 const sendgridtransport = require("nodemailer-sendgrid-transport");
@@ -102,6 +103,18 @@ exports.postNewRegistration = (req, res, next) => {
     registration
       .save()
       .then((result) => {
+        // Generate QR Code from text
+        var qr_png = qr.imageSync([result._id, result.Fullname], {
+          type: "png",
+        });
+        // Generate a random file name
+        let qr_code_file_name = new Date().getTime() + ".png";
+        fs.writeFileSync("./public/qr/" + qr_code_file_name, qr_png, (err) => {
+          if (err) {
+            throw err;
+          }
+        });
+
         transporter.sendMail(
           {
             to: EmailId,

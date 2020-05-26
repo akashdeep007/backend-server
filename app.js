@@ -31,6 +31,7 @@ app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("idcard")
 );
 app.use("/idcards", express.static(path.join(__dirname, "idcards")));
+app.use(express.static("./public"));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
