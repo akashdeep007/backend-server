@@ -104,9 +104,18 @@ exports.postNewRegistration = (req, res, next) => {
       .save()
       .then((result) => {
         // Generate QR Code from text
-        var qr_png = qr.imageSync([result._id, result.Fullname], {
-          type: "png",
-        });
+        var qr_png = qr.imageSync(
+          [
+            result._id,
+            result.Fullname,
+            result.EmailId,
+            result.RegistrationType,
+            result.TicketNumber,
+          ],
+          {
+            type: "png",
+          }
+        );
         // Generate a random file name
         let qr_code_file_name = new Date().getTime() + ".png";
         fs.writeFileSync("./public/qr/" + qr_code_file_name, qr_png, (err) => {
@@ -121,6 +130,12 @@ exports.postNewRegistration = (req, res, next) => {
             from: "beingakscool@gmail.com",
             subject: "Registered Succesfully",
             html: "<h5>Your Registration id is " + registration._id + "</h5>",
+            attachments: [
+              {
+                path: "./public/qr/" + qr_code_file_name,
+                qr_png,
+              },
+            ],
           },
           (err, info) => {
             if (err) {
