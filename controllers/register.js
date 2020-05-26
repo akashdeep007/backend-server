@@ -1,9 +1,21 @@
 const fs = require("fs");
 const path = require("path");
 
+const nodemailer = require("nodemailer");
+const sendgridtransport = require("nodemailer-sendgrid-transport");
+
 const { validationResult } = require("express-validator/check");
 
 const Registration = require("../models/Registration");
+
+const transporter = nodemailer.createTransport(
+  sendgridtransport({
+    auth: {
+      api_key:
+        "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",
+    },
+  })
+);
 
 exports.getRegistration = (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -61,12 +73,12 @@ exports.postNewRegistration = (req, res, next) => {
     throw error;
   }
   //for testing comment out the if block and fetch idcardurl from body
-  if (!req.file) {
-    const error = new Error("No ID Card provided.");
-    error.statusCode = 422;
-    throw error;
-  }
-  const IdCardUrl = req.file.path;
+  // if (!req.file) {
+  //   const error = new Error("No ID Card provided.");
+  //   error.statusCode = 422;
+  //   throw error;
+  // }
+  const IdCardUrl = req.body.IdCardUrl;
   const Fullname = req.body.Fullname;
   const EmailId = req.body.EmailId;
   const MobileNumber = req.body.MobileNumber;
@@ -90,10 +102,23 @@ exports.postNewRegistration = (req, res, next) => {
     registration
       .save()
       .then((result) => {
-        res.status(201).json({
-          message: "Registered successfully!",
-          result: result,
-        });
+        transporter.sendMail(
+          {
+            to: EmailId,
+            from: "beingakscool@gmail.com",
+            subject: "Registered Succesfully",
+            html: "<h5>Your Registration id is " + registration._id + "</h5>",
+          },
+          (err, info) => {
+            if (err) {
+              throw err;
+            }
+            res.status(201).json({
+              message: "Registered successfully!",
+              result: result,
+            });
+          }
+        );
       })
       .catch((err) => {
         if (!err.statusCode) {
