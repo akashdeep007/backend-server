@@ -13,7 +13,7 @@ router.get(
   registrationController.getSingleRegistration
 );
 
-router.get("/count/:counttype", registrationController.getcount);
+router.get("/count/:counttype", isAuth, registrationController.getcount);
 
 router.post(
   "/registration",
