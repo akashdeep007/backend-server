@@ -156,3 +156,17 @@ exports.postNewRegistration = (req, res, next) => {
       });
   });
 };
+
+exports.getcount = (req, res, next) => {
+  const counttype = req.params.counttype;
+  Registration.countDocuments({ RegistrationType: counttype }, function (
+    err,
+    result
+  ) {
+    if (err) {
+      throw err;
+    } else {
+      res.json("Number of documents in the collection: " + result);
+    }
+  });
+};
