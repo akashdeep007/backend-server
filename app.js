@@ -37,9 +37,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(
-    "mongodb+srv://akashdeep:Dyhal9Jo06NVc7GU@cluster0-dosbk.mongodb.net/stackhack?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGOURI)
   .then((result) => {
     app.listen(process.env.PORT || 8080);
   })
