@@ -7,7 +7,7 @@ const sendgridtransport = require("nodemailer-sendgrid-transport");
 
 const { validationResult } = require("express-validator/check");
 
-const Registration = require("app/models/Registration");
+const Registration = require("../models/registration");
 
 const transporter = nodemailer.createTransport(
   sendgridtransport({
