@@ -23,7 +23,6 @@ app.use((req, res, next) => {
 app.get("/", (req, res, next) => {
   res.status(201).json({
     message: "App Started",
-    result: result,
   });
 });
 app.use("/reg", registrationRoutes);
