@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-const multer = require("multer");
 const mongoose = require("mongoose");
 
 const registrationRoutes = require("./routes/registration");
@@ -9,28 +8,7 @@ const authRoutes = require("./routes/auth");
 
 const app = express();
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "idcards");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
 app.use(bodyParser.json());
-app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("idcard")
-);
-app.use("/idcards", express.static(path.join(__dirname, "idcards")));
 app.use(express.static("./public"));
 
 app.use((req, res, next) => {

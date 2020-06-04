@@ -73,12 +73,6 @@ exports.postNewRegistration = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  //for testing comment out the if block and fetch idcardurl from body
-  // if (!req.file) {
-  //   const error = new Error("No ID Card provided.");
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
   const IdCardUrl = req.body.IdCardUrl;
   const Fullname = req.body.Fullname;
   const EmailId = req.body.EmailId;
