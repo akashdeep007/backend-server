@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator/check");
-const Admin = require("../models/admin");
+const Admin = require("/app/models/admin");
 
 exports.login = (req, res, next) => {
   const email = req.body.email;
