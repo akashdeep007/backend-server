@@ -20,8 +20,13 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-
-app.use("/", registrationRoutes);
+app.get("/", (req, res, next) => {
+  res.status(201).json({
+    message: "App Started",
+    result: result,
+  });
+});
+app.use("/reg", registrationRoutes);
 app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
