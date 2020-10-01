@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+require('dotenv').config()
 module.exports = (req, res, next) => {
   const authHeader = req.get('Authorization');
   if (!authHeader) {
@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
   const token = authHeader.split(' ')[1];
   let decodedToken;
   try {
-    decodedToken = jwt.verify(token, 'somesupersecretsecret');
+    decodedToken = jwt.verify(token, process.env.SECRET_KEY);
   } catch (err) {
     err.statusCode = 500;
     throw err;
